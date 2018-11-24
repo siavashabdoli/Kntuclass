@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     goodsImage = findViewById(R.id.image_view_goods);
     Glide.with(this).load("https://dkstatics-public.digikala.com/digikala-products/631659.jpg?x-oss-process=image/resize,m_lfit,h_600,w_600/quality,q_80")
-        .into(goodsImage);
+            .into(goodsImage);
 
     tvHelloWorld = findViewById(R.id.textview1);
     etUserInput = findViewById(R.id.main_et_title);
