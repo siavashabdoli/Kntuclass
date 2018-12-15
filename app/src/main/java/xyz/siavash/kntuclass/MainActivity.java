@@ -8,8 +8,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import xyz.siavash.kntuclass.model.Show;
+import xyz.siavash.kntuclass.model.ShowItem;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,6 +45,23 @@ public class MainActivity extends AppCompatActivity {
         tvHelloWorld.setText(etUserInput.getText().toString());
       }
     });
+    TvMazeService tvMazeService = ApiProvider.getInstance().getTvMazeService();
+    tvMazeService.searchMovie("Batman").enqueue(new Callback<List<ShowItem>>() {
+      @Override
+      public void onResponse(Call<List<ShowItem>> call, Response<List<ShowItem>> response) {
+        if(response.isSuccessful()) {
+          response.body().get(0);
+        } else {
+          Toast.makeText(MainActivity.this,"error occurred", Toast.LENGTH_LONG).show();
+        }
+      }
+
+      @Override
+      public void onFailure(Call<List<ShowItem>> call, Throwable t) {
+        Toast.makeText(MainActivity.this,"error occurred", Toast.LENGTH_LONG).show();
+      }
+    });
+
   }
 
   @Override
