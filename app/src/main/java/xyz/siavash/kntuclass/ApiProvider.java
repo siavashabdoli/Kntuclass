@@ -8,11 +8,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiProvider {
   private static ApiProvider ourInstance;
-  private static Object lock;
-  private final TvMazeService tvMazeService;
+  private static Object lock = new Object();
+  private final LoginServices tvMazeService;
 
   public static ApiProvider getInstance() {
-    if(ourInstance == null) {
+    if (ourInstance == null) {
       synchronized (lock) {
         if (ourInstance == null) {
           ourInstance = new ApiProvider();
@@ -24,20 +24,20 @@ public class ApiProvider {
 
   private ApiProvider() {
     OkHttpClient okHttpClient = new OkHttpClient.Builder()
-        .build();
+            .build();
     Gson gson = new Gson();
 
     Retrofit retrofit = new Retrofit.Builder()
-        .baseUrl(" http://api.tvmaze.com")
-        .addConverterFactory(GsonConverterFactory.create(gson))
-        .client(okHttpClient)
-        .build();
+            .baseUrl("http://192.168.43.54:8090")
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .client(okHttpClient)
+            .build();
 
-    tvMazeService = retrofit.create(TvMazeService.class);
+    tvMazeService = retrofit.create(LoginServices.class);
 
   }
 
-  public TvMazeService getTvMazeService() {
+  public LoginServices getTvMazeService() {
     return tvMazeService;
   }
 }

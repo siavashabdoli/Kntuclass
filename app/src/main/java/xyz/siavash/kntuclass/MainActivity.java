@@ -12,13 +12,10 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import xyz.siavash.kntuclass.model.Show;
-import xyz.siavash.kntuclass.model.ShowItem;
+import retrofit2.http.POST;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     goodsImage = findViewById(R.id.image_view_goods);
     Glide.with(this).load("https://dkstatics-public.digikala.com/digikala-products/631659.jpg?x-oss-process=image/resize,m_lfit,h_600,w_600/quality,q_80")
-        .into(goodsImage);
+            .into(goodsImage);
 
     tvHelloWorld = findViewById(R.id.textview1);
     etUserInput = findViewById(R.id.main_et_title);
@@ -43,22 +40,24 @@ public class MainActivity extends AppCompatActivity {
       @Override
       public void onClick(View v) {
         tvHelloWorld.setText(etUserInput.getText().toString());
-      }
-    });
-    TvMazeService tvMazeService = ApiProvider.getInstance().getTvMazeService();
-    tvMazeService.searchMovie("Batman").enqueue(new Callback<List<ShowItem>>() {
-      @Override
-      public void onResponse(Call<List<ShowItem>> call, Response<List<ShowItem>> response) {
-        if(response.isSuccessful()) {
-          response.body().get(0);
-        } else {
-          Toast.makeText(MainActivity.this,"error occurred", Toast.LENGTH_LONG).show();
-        }
-      }
 
-      @Override
-      public void onFailure(Call<List<ShowItem>> call, Throwable t) {
-        Toast.makeText(MainActivity.this,"error occurred", Toast.LENGTH_LONG).show();
+        LoginServices login = ApiProvider.getInstance().getTvMazeService();
+        Call<MessageCall> user = login.user("morteza", new User("KNTU", "123456"));
+        user.enqueue(new Callback<MessageCall>() {
+          @Override
+          public void onResponse(Call<MessageCall> call, Response<MessageCall> response) {
+            if (response.isSuccessful()) {
+              Toast.makeText(MainActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
+            } else {
+              Toast.makeText(MainActivity.this, "404", Toast.LENGTH_LONG).show();
+            }
+          }
+
+          @Override
+          public void onFailure(Call<MessageCall> call, Throwable t) {
+            Toast.makeText(MainActivity.this, "failure", Toast.LENGTH_LONG).show();
+          }
+        });
       }
     });
 
